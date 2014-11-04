@@ -64,7 +64,7 @@ d3.select("#titlebar").style("width", document.getElementById("titlebar").offset
 var margin = {
         top: 70,
         right: 10,
-        bottom: 12,
+        bottom: 30,
         left: 40
     },
     width = document.getElementById("chart").offsetWidth - margin.left - margin.right,
