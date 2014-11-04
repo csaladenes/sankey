@@ -1,0 +1,280 @@
+<!DOCTYPE xhtml>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Sankey Diagram Generator #sankey #d3js @csaladenes" />
+    <meta name="keywords" content="csaladenes, sankey diagram, d3.js, d3js" />
+    <!--<meta property="og:image" content="http://food.csaladen.es/favicon.png" />-->
+	<meta property="og:image" content="http://food.csaladen.es/food_energy_flows_sankey.jpg" />
+    <meta property="og:description" content="Sankey Diagram Generator #sankey #d3js @csaladenes" />
+    <meta property="og:title" content="Sankey Diagram" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="food.csaladen.es" />
+    <!--<meta property="og:url" content="http://food.csaladen.es" />-->
+    <meta property="fb:admins" content="100943737036023614165" />
+    <title>Sankey Diagram</title>
+    <link rel="shortcut icon" href="http://food.csaladen.es/favicon.png" />
+    <style>
+        html,
+        body {
+            height: 100%;
+            font-family: "Trebuchet MS", "Open Sans", Segoe UI light, Verdana, Tahoma, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+        }
+        #chart {
+            height: 99%;
+            float: left;
+            position: absolute;
+            width: -moz-calc(80% - 45px);
+            width: -webkit-calc(80% - 45px);
+            width: calc(80% - 45px);
+        }
+        a {
+            text-decoration: none;
+        }
+        .pagetitle {
+            height: 30px;
+            color: #F60;
+            font-size: 20px;
+            line-height: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-style: oblique
+        }
+        .node rect {
+            cursor: move;
+            fill-opacity: .9;
+            shape-rendering: crispEdges
+        }
+        .node text {
+            pointer-events: none;
+            text-shadow: 0 1px 0 #fff
+        }
+        .link {
+            stroke: #000;
+            stroke-opacity: .3;
+        }
+        .link:hover {
+            stroke-opacity: .7;
+        }
+        #titlebar {
+				width: -moz-calc(80% - 90px);
+				width: -webkit-calc(80% - 90px);
+				width: calc(80% - 90px);
+				height: 30px;
+            border-bottom: solid;
+            border-color: #EEE;
+            padding-bottom: 5px;
+            margin-left: 40px;
+            margin-top: 5px;
+            position: fixed;
+            z-index: 50;
+        }
+        #titlebar-right {
+            right: -moz-calc(20% + 50px);
+            right: -webkit-calc(20% + 50px);
+            right: calc(20% + 50px);
+            height: 30px;
+            padding-bottom: 5px;
+            margin-left: 40px;
+            margin-top: 5px;
+            position: fixed;
+            z-index: 50;
+        }
+        .dragdealer {
+            height: 30px;
+            background: #EEE;
+            z-index: 50;
+        }
+        .dragdealer .handle {
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+        .dragdealer .red-bar {
+            width: 100px;
+            height: 30px;
+            background: #F80;
+            color: #FFF;
+            font-size: 20px;
+            line-height: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-style: oblique
+        }
+        .dragdealer .red-bar:hover {
+            background: #F60
+        }
+        .dragdealer .orange-bar {
+            width: 25px;
+            height: 18px;
+            background: #F80;
+            color: #FFF;
+            font-size: 18px;
+            line-height: 16px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .dragdealer .orange-bar:hover {
+            background: #F60
+        }
+        .dragdealer .disabled {
+            background: #898989
+        }
+		#social {
+			position: fixed;
+            bottom: 5;
+            right: 0;
+            text-decoration: none;
+			padding: 3px;
+			padding-top:1px;
+            z-index: 800;
+			white-space:nowrap;
+			overflow:hidden;
+        }
+		#social a{
+			margin-left:10px;
+			margin-right:5px;
+			color: #000;
+            font-size: 10px;
+            font-family: "Trebuchet MS";  
+            font-weight: lighter;
+            text-decoration: none;			
+		}
+		.likeform input {
+			width:100%; 
+			min-width:220px;
+		}
+    </style>
+    <script src="js/dragdealer.js"></script>
+    <script src="js/d3.v3.min.js"></script>
+    <script>
+        var sizecorrection = Math.max(0, 220 - parseInt(window.innerWidth * 0.2));
+        function checksize() {
+            if ((window.innerWidth < 800) || (window.innerHeight < 600)) {
+                alert("The recommended minimum resolution is 800 x 600.\n Yours is " + window.innerWidth + " x " + window.innerHeight + ".");
+            }
+			setTimeout(function(){
+				d3.select("#social").transition().style("opacity", 1);
+			},3000);
+		}
+		window.onresize = function() {
+			window.location.reload();
+		}
+    </script>
+	<script type="text/javascript">var switchTo5x=true;</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+	<script type="text/javascript">stLight.options({publisher: "505a26ad-d820-47bd-a500-7f49d04a30f5", doNotHash: true, doNotCopy: false, hashAddressBar: false});</script>
+	</head>
+<body onload="checksize();">
+
+    <!--TITLELBAR-->
+
+    <div id="titlebar">
+        <span id="titletext" class="pagetitle">Sankey Diagram</span>
+    </div>
+	
+	<!--PAGE WRAPPER-->
+
+    <div id="content" style="opacity:1;">
+
+
+        <!--SANKEY DIAGRAM CONTROLS-->
+
+        <div id="sourcecontrol" style="float:right; margin-right:10px; width:20%; margin-top:10px; min-width:220px; border-left:solid; border-color:#EEE; height:98%; padding-left:20px;line-height:26px;z-index:600000;">
+			
+            
+            <div style="display:block;overflow: hidden;white-space: nowrap;"><span style="float:left;">Move nodes:</span>
+                <div style="float:right; padding-right:0; margin-right:0;">
+                    <div style="font-size:20px;font-weight:bold;line-height:10px;">
+                        <input title="Enable horizontal node dragging" type="checkbox" id="xmove">
+                        <label for="xmove">↔</label>
+                        <img alt="" style="width:5px;height:0px;">
+                        <input title="Enable vertical node dragging" type="checkbox" id="ymove" checked>
+                        <label for="ymove">↕</label>
+                    </div>
+                </div>
+            </div>
+            <div style="display:block;overflow: hidden;white-space: nowrap;"><span style="float:left;">Density:</span>
+                <div style="float:right;">
+                    <div id="pslider" title="Drag slider to set diagram node padding" class="dragdealer" style="margin-top:2px;margin-left:-130px;width:130px; height:18px; position:absolute;">
+                        <div class="handle orange-bar">↔
+                            <script>
+                                var densityslider = new Dragdealer("pslider", {
+                                    x: 0.5,
+                                    steps: 5,
+                                    snap: true,
+                                    callback: function(a, b) {
+                                        padding = paddingmultiplier * (1 - a) + 3;
+                                        change()
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display:block;overflow: hidden;white-space: nowrap;"><span style="float:left;">Opacity:</span>
+                <div style="float:right;">
+                    <div id="oslider" title="Drag slider to set diagram flow opacities" class="dragdealer" style="margin-top:2px;margin-left:-130px;width:130px; height:18px; position:absolute;">
+                        <div class="handle orange-bar">↔
+                            <script>
+                                new Dragdealer("oslider", {
+                                    x: 0.25,
+                                    steps: 5,
+                                    snap: true,
+                                    callback: function(a, b) {
+                                        lowopacity = 0.1 + 0.8 * a;
+                                        change()
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<div style="display:block;overflow: hidden;white-space: nowrap;">
+				<div>
+					<button onclick="draw()" style="width:100%; min-width:220px; margin-top:20px;margin-bottom:20px;font-size:20px;">Draw Sankey</button></div>
+				<div><button onclick="addnode()" style="width:100%; min-width:220px;">Add new node</button></div>
+				<div class="likeform" id="nodes-form">
+					<div><input type="text" name="in" value="enter node name" onfocus="this.value='';this.style.color='#f60';this.onfocus='';"/></div>
+				</div>
+			</div>
+			<div style="display:block;overflow: hidden;white-space: nowrap;">
+				<div><button onclick="addlink()" style="width:100%; min-width:220px;">Add new link</button></div>
+				<div class="likeform" id="links-form">
+					<div><input type="text" name="in2" value="enter link name" onfocus="this.value='';this.style.color='#f60';this.onfocus='';"/></div>
+				</div>
+				</div>
+        </div>
+
+       
+        <!--SANKEY DIAGRAM-->
+
+        <div id="chart" style="z-index:5;"></div>
+
+        <!---------SCRIPTS----------->
+
+        <script src="js/sankey.js"></script>
+        <script src="js/food.js"></script>
+	
+    </div>
+	
+	<!--SOCIAL-->
+	
+	<div id="social" style="opacity:0; z-index:800;">
+		<span class='st_facebook'></span>
+		<span class='st_twitter'></span>
+		<span class='st_googleplus'></span>
+		<span class='st_linkedin'></span>
+		<span class='st_tumblr'></span>
+		<span class='st_reddit'></span>
+		<span class='st_email'></span>
+		<span><a href="http://www.csaladen.es" title="created by" alt="created by">© D.C. 2014</a></span>
+	</div>
+	
+	</body>
+</html>
