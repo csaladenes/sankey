@@ -186,6 +186,7 @@
         <span id="titletext" class="pagetitle">Sankey Diagram</span>
     </div>
 	
+	
 	<!--PAGE WRAPPER-->
 
     <div id="content" style="opacity:1;">
@@ -195,7 +196,24 @@
 
         <div id="sourcecontrol" style="float:right; margin-right:10px; width:20%; margin-top:10px; min-width:220px; border-left:solid; border-color:#EEE; height:98%; padding-left:20px;line-height:26px;z-index:600000;">
 			
-            
+            <!--LOAD-->
+
+			<div id="load" style="position:fixed;float:left;width:inherit;height:100%;background:#fff;color:#000;opacity:0;margin-top:0px;margin-left:0px;z-index:-1;">
+				<div>Please paste the Sankey string below:</div>
+				<textarea id="loadtext" style="margin-top:20px;margin-bottom:20px;width:97%;height:50%;"/></textarea> 
+				<div><button onclick="loadsubmit();">Done</button></div>
+			</div>
+			
+			<!--SAVE-->
+
+			<div id="save" style="position:fixed;float:left;width:inherit;height:100%;background:#fff;color:#000;opacity:0;margin-top:0px;margin-left:0px;z-index:-1;">
+				<div>Please copy and save the text below to load later:</div>
+				<textarea id="savetext" style="margin-top:20px;margin-bottom:20px;width:97%;height:50%;"/></textarea> 
+				<div><button onclick="d3.select('#save').transition().style('opacity',0).style('z-index',-1)">Done</button></div>
+			</div>
+			
+			<!--INCREMENTAL-->
+			
             <div style="display:block;overflow: hidden;white-space: nowrap;"><span style="float:left;">Move nodes:</span>
                 <div style="float:right; padding-right:0; margin-right:0;">
                     <div style="font-size:20px;font-weight:bold;line-height:10px;">

@@ -44,6 +44,27 @@ function draw() {
 	}
 	change(data);
 }
+function save(){
+	d3.select('#save').style('z-index',100).transition().style('opacity',0.9);
+	st='{"nodes": ['
+	for (i = 0; i < nodesform[0][0].children.length; i++) {
+		st=st+'{"name":"'+nodesform[0][0].children[i].children[0].value+'"},';
+	}
+	st=st.substring(0, st.length - 1)+'], "links": [';
+	for (i = 0; i < linksform[0][0].children.length; i++) {
+		var array = linksform[0][0].children[i].children[0].value.split(',');
+		st=st+'{"source":'+parseInt(array[0])+',"target":'+parseInt(array[1])+',"value":'+parseFloat(array[2])+'},';
+	}
+	st = st.substring(0, st.length - 1)+']}';
+	d3.select('#savetext').text(st);
+}
+function load(){
+	d3.select('#load').style('z-index',100).transition().style('opacity',0.9);
+}
+function loadsubmit(){
+	d3.select('#load').transition().style('opacity',0).style('z-index',-1);
+	change(JSON.parse(d3.select('#load')[0][0].children[1].value));
+}
 //<!--SANKEY DIAGRAM-->
 
 var padding = 28;
