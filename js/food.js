@@ -13,22 +13,34 @@ D3.js http://d3js.org/  data-oriented javascript framework.
 
 //<!--DATA INIT-->
 
-//var data={"nodes": [{"name": "Milk - Excluding Butter"}, {"name": "Feed"}, {"name": "Oilcrops"}], "links": []}
 var data={"nodes": [], "links": []}
 
 //<!--DATA ENTRY-->
 
 nodesform=d3.select("#nodes-form");
 function addnode() {
-	nodesform.append("div").append("input").attr("value","enter node name").attr("onfocus","this.value='';this.style.color='#f60';this.onfocus='';");;
+	nodesform.append("div").append("input").attr("value","New Node");
+}
+function removenode() {
+	nodesform[0][0].children[linksform[0][0].children.length-1].remove("div")
 }
 linksform=d3.select("#links-form");
 function addlink() {
-	linksform.append("div").append("input").attr("value","enter link name").attr("onfocus","this.value='';this.style.color='#f60';this.onfocus='';");
+	linksform.append("div").append("input").attr("value","0,1,0.52");
+}
+function removelink() {
+	linksform[0][0].children[linksform[0][0].children.length-1].remove("div")
 }
 function draw() {
+	
+	data={"nodes": [], "links": []}
+	
 	for (i = 0; i < nodesform[0][0].children.length; i++) {
 		data.nodes.push({"name": nodesform[0][0].children[i].children[0].value});
+	}
+	for (i = 0; i < linksform[0][0].children.length; i++) {
+		var array = linksform[0][0].children[i].children[0].value.split(',');
+		data.links.push({"source":parseInt(array[0]),"target":parseInt(array[1]),"value":parseFloat(array[2])});
 	}
 	change(data);
 }
@@ -56,16 +68,14 @@ var margin = {
         left: 40
     },
     width = document.getElementById("chart").offsetWidth - margin.left - margin.right,
-    height = document.getElementById("chart").offsetHeight - margin.bottom - 130;
+    height = document.getElementById("chart").offsetHeight - margin.bottom - 90;
 var svg = d3.select("#chart").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var sankey = d3.sankey().nodeWidth(30).nodePadding(padding).size([width, height]);
 var path = sankey.reversibleLink();
 var change = function() {};
 
-//var data={"nodes": [{"name": "Milk - Excluding Butter"}, {"name": "Feed"}, {"name": "Oilcrops"}], "links": [{"source": 0, "target": 1, "value": 0.046487979677487495},{"source": 1, "target": 2, "value": 0.08},{"source": 0, "target": 2, "value": 0.2}]};
-
 change = function(d) {
-						
+					
 	padding = paddingmultiplier * (1 - densityslider.getValue()[0]) + 3
 	svg.selectAll("g").remove();
 	sankey = d3.sankey().nodeWidth(30).nodePadding(padding).size([width, height]);
@@ -131,7 +141,16 @@ change = function(d) {
 			return i.name
 		}).filter(function(i) {
 			return i.x < width / 2
-		}).attr("x", 6 + sankey.nodeWidth()).attr("text-anchor", "start");
+		}).attr("x", 6 + sankey.nodeWidth()).attr("text-anchor", "start")
+	c.append("text") //node
+		.attr("x", function(i) {return -i.dy / 2})
+		.attr("y", function(i) {return i.dx / 2 + 6})
+		.attr("transform", "rotate(270)").attr("text-anchor", "middle").text(function(i) {
+			if (i.dy>50){
+				return format(i.value);
+			}
+		}).attr("fill","white").attr("stroke","black");
+		
 
 	function b(i) { //dragmove
 		if (document.getElementById("ymove").checked) {
@@ -151,4 +170,4 @@ change = function(d) {
 		e.attr("d", path(2))
 	};
 };
-change(data);
+draw();

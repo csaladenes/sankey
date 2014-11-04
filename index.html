@@ -153,8 +153,8 @@
     <script>
         var sizecorrection = Math.max(0, 220 - parseInt(window.innerWidth * 0.2));
         function checksize() {
-            if ((window.innerWidth < 800) || (window.innerHeight < 600)) {
-                alert("The recommended minimum resolution is 800 x 600.\n Yours is " + window.innerWidth + " x " + window.innerHeight + ".");
+            if ((window.innerWidth < 600) || (window.innerHeight < 300)) {
+                alert("The recommended minimum resolution is 600 x 300.\n Yours is " + window.innerWidth + " x " + window.innerHeight + ".");
             }
 			setTimeout(function(){
 				d3.select("#social").transition().style("opacity", 1);
@@ -208,7 +208,7 @@
                                     snap: true,
                                     callback: function(a, b) {
                                         padding = paddingmultiplier * (1 - a) + 3;
-                                        change()
+                                        draw()
                                     }
                                 });
                             </script>
@@ -227,7 +227,7 @@
                                     snap: true,
                                     callback: function(a, b) {
                                         lowopacity = 0.1 + 0.8 * a;
-                                        change()
+                                        draw()
                                     }
                                 });
                             </script>
@@ -237,16 +237,33 @@
             </div>
 			<div style="display:block;overflow: hidden;white-space: nowrap;">
 				<div>
-					<button onclick="draw()" style="width:100%; min-width:220px; margin-top:20px;margin-bottom:20px;font-size:20px;">Draw Sankey</button></div>
-				<div><button onclick="addnode()" style="width:100%; min-width:220px;">Add new node</button></div>
+					<button onclick="draw()" style="width:100%; min-width:220px; margin-top:20px;margin-bottom:20px;font-size:20px;">Draw Sankey</button>
+				</div>
+				<div style="display:block;overflow: hidden;white-space: nowrap;">
+				<span><button onclick="addnode()" style="width:45%; min-width:100px; float:left;">Add new node</button></span>
+				<span><button onclick="removenode()" style="width:45%; min-width:100px; float:right;">Remove node</button></span>
+				</div>
 				<div class="likeform" id="nodes-form">
-					<div><input type="text" name="in" value="enter node name" onfocus="this.value='';this.style.color='#f60';this.onfocus='';"/></div>
+					<div><input type="text" value="Oil"/></div>
+					<div><input type="text" value="Natural Gas" /></div>
+					<div><input type="text" value="Coal"/></div>
+					<div><input type="text" value="Fossil Fuels"/></div>
+					<div><input type="text" value="Electricity"/></div>
+					<div><input type="text" value="Energy"/></div>
 				</div>
 			</div>
 			<div style="display:block;overflow: hidden;white-space: nowrap;">
-				<div><button onclick="addlink()" style="width:100%; min-width:220px;">Add new link</button></div>
+				<div style="display:block;overflow: hidden;white-space: nowrap;">
+				<span><button onclick="addlink()" style="width:45%; min-width:100px; float:left;">Add new link</button></span>
+				<span><button onclick="removelink()" style="width:45%; min-width:100px; float:right;">Remove link</button></span>
+				</div>
 				<div class="likeform" id="links-form">
-					<div><input type="text" name="in2" value="enter link name" onfocus="this.value='';this.style.color='#f60';this.onfocus='';"/></div>
+					<div><input type="text" value="0,3,15"/></div>
+					<div><input type="text" value="1,3,20"/></div>
+					<div><input type="text" value="2,3,25"/></div>
+					<div><input type="text" value="2,4,25"/></div>
+					<div><input type="text" value="3,5,60"/></div>
+					<div><input type="text" value="4,5,25"/></div>
 				</div>
 				</div>
         </div>
