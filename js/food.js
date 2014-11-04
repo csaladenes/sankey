@@ -22,7 +22,7 @@ function addnode() {
 	nodesform.append("div").append("input").attr("value","New Node");
 }
 function removenode() {
-	nodesform[0][0].children[linksform[0][0].children.length-1].remove("div")
+	nodesform[0][0].children[nodesform[0][0].children.length-1].remove("div")
 }
 linksform=d3.select("#links-form");
 function addlink() {
