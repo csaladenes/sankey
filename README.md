@@ -7,7 +7,10 @@ Sankey Diagram Generator
 - Automatically adjusts to screen size
 - Works on all devices and renders the same
 - Load/Save functionality in JSON format
-
-
+  
+  
+Try: http://sankey.csaladen.es  
+  
+  
 Denes Csala, 2014  
 http://csaladen.es
