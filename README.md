@@ -9,6 +9,5 @@ Sankey Diagram Generator
 - Load/Save functionality in JSON format
 
 
-Denes Csala, 2014
-@csaladenes
+Denes Csala, 2014  
 http://csaladen.es
