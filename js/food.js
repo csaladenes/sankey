@@ -46,11 +46,11 @@ function draw() {
 }
 function save(){
 	d3.select('#save').style('z-index',100).transition().style('opacity',0.9);
-	st='{"nodes": ['
+	st='{"nodes":['
 	for (i = 0; i < nodesform[0][0].children.length; i++) {
 		st=st+'{"name":"'+nodesform[0][0].children[i].children[0].value+'"},';
 	}
-	st=st.substring(0, st.length - 1)+'], "links": [';
+	st=st.substring(0, st.length - 1)+'],"links":[';
 	for (i = 0; i < linksform[0][0].children.length; i++) {
 		var array = linksform[0][0].children[i].children[0].value.split(',');
 		st=st+'{"source":'+parseInt(array[0])+',"target":'+parseInt(array[1])+',"value":'+parseFloat(array[2])+'},';
@@ -63,8 +63,33 @@ function load(){
 }
 function loadsubmit(){
 	d3.select('#load').transition().style('opacity',0).style('z-index',-1);
-	change(JSON.parse(d3.select('#load')[0][0].children[1].value));
+	var loadtext=d3.select('#load')[0][0].children[1].value;
+	if (loadtext!="") {
+		//redraw
+		var newdata=JSON.parse(loadtext);
+		change(newdata);
+		//remove existing node entry boxes
+		var n=nodesform[0][0].children.length;
+		for (i = 0; i < n; i++) {
+			nodesform[0][0].children[0].remove("div");
+		}
+		//remove existing link entry boxes
+		var n=linksform[0][0].children.length;
+		for (i = 0; i < n; i++) {
+			linksform[0][0].children[0].remove("div");
+		}
+		//add new node entry boxes
+		for (i = 0; i < newdata.nodes.length; i++) {
+			nodesform.append("div").append("input").attr("value",newdata.nodes[i].name);
+		}
+		//add new link entry boxes
+		var newdata=JSON.parse(loadtext.substring(loadtext.indexOf('"links":[')+8, loadtext.length - 1))
+		for (i = 0; i < newdata.length; i++) {
+			linksform.append("div").append("input").attr("value",newdata[i].source+","+newdata[i].target+","+newdata[i].value);
+		}
+	}
 }
+
 //<!--SANKEY DIAGRAM-->
 
 var padding = 28;
