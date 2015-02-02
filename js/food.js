@@ -1,11 +1,11 @@
 /*This software is released under the MIT License
 
-Copyright (C) 2014 Denes Csala http://www.csaladen.es
+MIT License 2014 Denes Csala http://www.csaladen.es
 
 The following software uses the javascript frameworks below,
 all of which are distributed under the MIT or GNU/GPL license:
 D3.js http://d3js.org/  data-oriented javascript framework. 
-	- Sankey plugin http://bost.ocks.org/mike/sankey/ for D3.js (heavily modified) by Mike Bostock's, 
+	- Sankey plugin http://bost.ocks.org/mike/sankey/ for D3.js (modified) by Mike Bostock, 
 	  which is based on the initial version http://tamc.github.io/Sankey/ by Thomas Counsell. 
 	  I have incorporated the ability to render Sankey cycles, as pioneered by https://github.com/cfergus
 	- Dragdealer.js href="http://skidding.github.io/dragdealer/ by Ovidiu Chereches
