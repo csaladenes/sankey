@@ -1,1 +1,569 @@
-d3.sankey=function(){function u(){i.forEach(function(e){e.sourceLinks=[];e.targetLinks=[]});s.forEach(function(e){var t=e.source,n=e.target;if(typeof t==="number")t=e.source=i[e.source];if(typeof n==="number")n=e.target=i[e.target];t.sourceLinks.push(e);n.targetLinks.push(e)})}function a(){i.forEach(function(e){e.value=Math.max(d3.sum(e.sourceLinks,g),d3.sum(e.targetLinks,g))})}function f(){function n(r){r.index=t++;r.lowIndex=r.index;r.onStack=true;e.push(r);if(r.sourceLinks){r.sourceLinks.forEach(function(e){var t=e.target;if(!t.hasOwnProperty("index")){n(t);r.lowIndex=Math.min(r.lowIndex,t.lowIndex)}else if(t.onStack){r.lowIndex=Math.min(r.lowIndex,t.index)}});if(r.lowIndex===r.index){var i=[],s;do{s=e.pop();s.onStack=false;i.push(s)}while(s!=r);o.push({root:r,scc:i})}}}var e=[],t=0;i.forEach(function(e){if(!e.index){n(e)}});o.forEach(function(e,t){e.index=t;e.scc.forEach(function(e){e.component=t})})}function l(){function u(e){return[].concat.apply([],e)}function a(){var e=o,t,n,r=0;while(e.length){t=[];n={};e.forEach(function(e){e.x=r;e.scc.forEach(function(r){r.sourceLinks.forEach(function(r){if(!n.hasOwnProperty(r.target.component)&&r.target.component!=e.index){t.push(o[r.target.component]);n[r.target.component]=true}})})});e=t;++r}}function f(e,n){var r=[e],i=1,s=0;var o=0;while(i>0){var u=r.shift();i--;if(!u.hasOwnProperty("x")){u.x=o;u.dx=t;var a=n(u);r=r.concat(a);s+=a.length}if(i==0){o++;i=s;s=0}}}a();o.forEach(function(e,t){f(e.root,function(e){var n=e.sourceLinks.filter(function(e){return e.target.component==t}).map(function(e){return e.target});return n})});var e=0;var n=d3.nest().key(function(e){return e.x}).sortKeys(d3.ascending).entries(o).map(function(e){return e.values});var e=-1,s=-1;n.forEach(function(t){t.forEach(function(t){t.x=e+1;t.scc.forEach(function(e){e.x=t.x+e.x;s=Math.max(s,e.x)})});e=s});i.filter(function(e){var t=e.sourceLinks.filter(function(e){return e.source.name!=e.target.name});return t.length==0}).forEach(function(t){t.x=e});p((r[0]-t)/Math.max(e,1))}function c(){i.forEach(function(e){if(!e.targetLinks.length){e.x=d3.min(e.sourceLinks,function(e){return e.target.x})-1}})}function h(e){i.forEach(function(t){if(!t.sourceLinks.length){t.x=e-1}})}function p(e){i.forEach(function(t){t.x*=e})}function d(e){function u(){var e=d3.min(t,function(e){return(r[1]-(e.length-1)*n)/d3.sum(e,g)});t.forEach(function(t){t.forEach(function(t,n){t.y=n;t.dy=t.value*e})});s.forEach(function(t){t.dy=t.value*e})}function a(e){function n(e){return m(e.source)*e.value}t.forEach(function(t,r){t.forEach(function(t){if(t.targetLinks.length){var r=d3.sum(t.targetLinks,n)/d3.sum(t.targetLinks,g);t.y+=(r-m(t))*e}})})}function f(e){function n(e){return m(e.target)*e.value}t.slice().reverse().forEach(function(t){t.forEach(function(t){if(t.sourceLinks.length){var r=d3.sum(t.sourceLinks,n)/d3.sum(t.sourceLinks,g);t.y+=(r-m(t))*e}})})}function l(){t.forEach(function(e){var t,i,s=0,o=e.length,u;e.sort(c);for(u=0;u<o;++u){t=e[u];i=s-t.y;if(i>0)t.y+=i;s=t.y+t.dy+n}i=s-n-r[1];if(i>0){s=t.y-=i;for(u=o-2;u>=0;--u){t=e[u];i=t.y+t.dy+n-s;if(i>0)t.y-=i;s=t.y}}})}function c(e,t){return e.y-t.y}var t=d3.nest().key(function(e){return e.x}).sortKeys(d3.ascending).entries(i).map(function(e){return e.values});u();l();for(var o=1;e>0;--e){f(o*=.99);l();a(o);l()}}function v(){function e(e,t){return e.source.y-t.source.y}function t(e,t){return e.target.y-t.target.y}i.forEach(function(n){n.sourceLinks.sort(t);n.targetLinks.sort(e)});i.forEach(function(e){var t=0,n=0;e.sourceLinks.forEach(function(e){e.sy=t;t+=e.dy});e.targetLinks.forEach(function(e){e.ty=n;n+=e.dy})})}function m(e){return e.y+e.dy/2}function g(e){return e.value}var e={},t=24,n=8,r=[1,1],i=[],s=[],o=[];e.nodeWidth=function(n){if(!arguments.length)return t;t=+n;return e};e.nodePadding=function(t){if(!arguments.length)return n;n=+t;return e};e.nodes=function(t){if(!arguments.length)return i;i=t;return e};e.links=function(t){if(!arguments.length)return s;s=t;return e};e.size=function(t){if(!arguments.length)return r;r=t;return e};e.layout=function(t){u();a();f();l();d(t);v();return e};e.relayout=function(){v();return e};e.reversibleLink=function(){function t(t,n){var r=n.source.x+n.source.dx,i=n.target.x,s=d3.interpolateNumber(r,i),o=s(e),u=s(1-e),a=n.source.y+n.sy,f=n.target.y+n.ty,l=n.source.y+n.sy+n.dy,c=n.target.y+n.ty+n.dy;switch(t){case 0:return"M"+r+","+a+"L"+r+","+(a+n.dy);case 1:return"M"+r+","+a+"C"+o+","+a+" "+u+","+f+" "+i+","+f+"L"+i+","+c+"C"+u+","+c+" "+o+","+l+" "+r+","+l+"Z";case 2:return"M"+i+","+f+"L"+i+","+(f+n.dy)}}function n(e,t){function i(e){return e.source.y+e.sy>e.target.y+e.ty?-1:1}function s(e,t){return e+","+t+" "}var n=30;var r=15;var o=i(t)*r,u=t.source.x+t.source.dx,a=t.source.y+t.sy,f=t.target.x,l=t.target.y+t.ty;switch(e){case 0:return"M"+s(u,a)+"C"+s(u,a)+s(u+n,a)+s(u+n,a+o)+"L"+s(u+n,a+o+t.dy)+"C"+s(u+n,a+t.dy)+s(u,a+t.dy)+s(u,a+t.dy)+"Z";case 1:return"M"+s(u+n,a+o)+"C"+s(u+n,a+3*o)+s(f-n,l-3*o)+s(f-n,l-o)+"L"+s(f-n,l-o+t.dy)+"C"+s(f-n,l-3*o+t.dy)+s(u+n,a+3*o+t.dy)+s(u+n,a+o+t.dy)+"Z";case 2:return"M"+s(f-n,l-o)+"C"+s(f-n,l)+s(f,l)+s(f,l)+"L"+s(f,l+t.dy)+"C"+s(f,l+t.dy)+s(f-n,l+t.dy)+s(f-n,l+t.dy-o)+"Z"}}var e=.5;return function(e){return function(r){if(r.source.x<r.target.x){return t(e,r)}else{return n(e,r)}}}};e.link=function(){function t(t){var n=t.source.x+t.source.dx,r=t.target.x,i=d3.interpolateNumber(n,r),s=i(e),o=i(1-e),u=t.source.y+t.sy+t.dy/2,a=t.target.y+t.ty+t.dy/2;return"M"+n+","+u+"C"+s+","+u+" "+o+","+a+" "+r+","+a}var e=.5;t.curvature=function(n){if(!arguments.length)return e;e=+n;return t};return t};return e}
+d3.sankey = function() {
+  var sankey = {},
+      nodeWidth = 24,
+      nodePadding = 8,
+      size = [1, 1],
+      nodes = [],
+      links = [],
+      components = [];
+
+  sankey.nodeWidth = function(_) {
+    if (!arguments.length) return nodeWidth;
+    nodeWidth = +_;
+    return sankey;
+  };
+
+  sankey.nodePadding = function(_) {
+    if (!arguments.length) return nodePadding;
+    nodePadding = +_;
+    return sankey;
+  };
+
+  sankey.nodes = function(_) {
+    if (!arguments.length) return nodes;
+    nodes = _;
+    return sankey;
+  };
+
+  sankey.links = function(_) {
+    if (!arguments.length) return links;
+    links = _;
+    return sankey;
+  };
+
+  sankey.size = function(_) {
+    if (!arguments.length) return size;
+    size = _;
+    return sankey;
+  };
+
+  sankey.layout = function(iterations) {
+    computeNodeLinks();
+    computeNodeValues();
+
+    computeNodeStructure();
+    computeNodeBreadths();
+
+    computeNodeDepths(iterations);
+    computeLinkDepths();
+    
+    return sankey;
+  };
+
+  sankey.relayout = function() {
+    computeLinkDepths();
+    return sankey;
+  };
+
+  // A more involved path generator that requires 3 elements to render -- 
+  // It draws a starting element, intermediate and end element that are useful
+  // while drawing reverse links to get an appropriate fill.
+  //
+  // Each link is now an area and not a basic spline and no longer guarantees
+  // fixed width throughout.
+  //
+  // Sample usage:
+  //
+  //  linkNodes = this._svg.append("g").selectAll(".link")
+  //      .data(this.links)
+  //    .enter().append("g")
+  //      .attr("fill", "none")
+  //      .attr("class", ".link")
+  //      .sort(function(a, b) { return b.dy - a.dy; });
+  //
+  //  linkNodePieces = [];
+  //  for (var i = 0; i < 3; i++) {
+  //    linkNodePieces[i] = linkNodes.append("path")
+  //      .attr("class", ".linkPiece")
+  //      .attr("d", path(i))
+  //      .attr("fill", ...)
+  //  }
+  sankey.reversibleLink = function() {
+    var curvature = .5;
+
+    // Used when source is behind target, the first and last paths are simple
+    // lines at the start and end node while the second path is the spline
+    function forwardLink(part, d) {
+      var x0 = d.source.x + d.source.dx,
+          x1 = d.target.x,
+          xi = d3.interpolateNumber(x0, x1),
+          x2 = xi(curvature),
+          x3 = xi(1 - curvature),
+          y0 = d.source.y + d.sy,
+          y1 = d.target.y + d.ty,
+          y2 = d.source.y + d.sy + d.dy,
+          y3 = d.target.y + d.ty + d.dy;
+
+      switch (part) {
+        case 0:
+          return "M" + x0 + "," + y0 + "L" + x0 + "," + (y0 + d.dy);
+
+        case 1:
+          return "M" + x0 + "," + y0
+               + "C" + x2 + "," + y0 + " " + x3 + "," + y1 + " " + x1 + "," + y1
+               + "L" + x1 + "," + y3
+               + "C" + x3 + "," + y3 + " " + x2 + "," + y2 + " " + x0 + "," + y2
+               + "Z";
+      
+        case 2:
+          return "M" + x1 + "," + y1 + "L" + x1 + "," + (y1 + d.dy);
+      }
+    }
+
+    // Used for self loops and when the source is actually in front of the 
+    // target; the first element is a turning path from the source to the 
+    // destination, the second element connects the two twists and the last 
+    // twists into the target element.
+    //
+    // 
+    //  /--Target
+    //  \----------------------\
+    //                 Source--/
+    //
+    function backwardLink(part, d) {
+      var curveExtension = 30;
+      var curveDepth = 15;
+
+      function getDir(d) {
+        return d.source.y + d.sy > d.target.y + d.ty ? -1 : 1;
+      }
+
+      function p(x, y) {
+        return x + "," + y + " ";
+      }
+
+      var dt = getDir(d) * curveDepth,
+          x0 = d.source.x + d.source.dx,
+          y0 = d.source.y + d.sy,
+          x1 = d.target.x,
+          y1 = d.target.y + d.ty;
+
+      switch (part) {
+        case 0:
+          return "M" + p(x0, y0) + 
+                 "C" + p(x0, y0) +
+                       p(x0 + curveExtension, y0) +
+                       p(x0 + curveExtension, y0 + dt) +
+                 "L" + p(x0 + curveExtension, y0 + dt + d.dy) +
+                 "C" + p(x0 + curveExtension, y0 + d.dy) +
+                       p(x0, y0 + d.dy) +
+                       p(x0, y0 + d.dy) +
+                 "Z";
+        case 1:
+          return "M" + p(x0 + curveExtension, y0 + dt) + 
+                 "C" + p(x0 + curveExtension, y0 + 3 * dt) +
+                       p(x1 - curveExtension, y1 - 3 * dt) +
+                       p(x1 - curveExtension, y1 - dt) +
+                 "L" + p(x1 - curveExtension, y1 - dt + d.dy) +
+                 "C" + p(x1 - curveExtension, y1 - 3 * dt + d.dy) +
+                       p(x0 + curveExtension, y0 + 3 * dt + d.dy) +
+                       p(x0 + curveExtension, y0 + dt + d.dy) +
+                 "Z";
+
+        case 2:
+          return "M" + p(x1 - curveExtension, y1 - dt) + 
+                 "C" + p(x1 - curveExtension, y1) +
+                       p(x1, y1) +
+                       p(x1, y1) +
+                 "L" + p(x1, y1 + d.dy) +
+                 "C" + p(x1, y1 + d.dy) +
+                       p(x1 - curveExtension, y1 + d.dy) +
+                       p(x1 - curveExtension, y1 + d.dy - dt) +
+                 "Z";
+      }
+    }
+
+    return function(part) {
+      return function(d) {
+        if (d.source.x < d.target.x) {
+          return forwardLink(part, d);
+        } else {
+          return backwardLink(part, d);
+        }
+      }
+    }
+  };
+
+  // The standard link path using a constant width spline that needs a 
+  // single path element.
+  sankey.link = function() {
+    var curvature = .5;
+
+    function link(d) {
+      var x0 = d.source.x + d.source.dx,
+          x1 = d.target.x,
+          xi = d3.interpolateNumber(x0, x1),
+          x2 = xi(curvature),
+          x3 = xi(1 - curvature),
+          y0 = d.source.y + d.sy + d.dy / 2,
+          y1 = d.target.y + d.ty + d.dy / 2;
+      return "M" + x0 + "," + y0
+           + "C" + x2 + "," + y0
+           + " " + x3 + "," + y1
+           + " " + x1 + "," + y1;
+    }
+
+    link.curvature = function(_) {
+      if (!arguments.length) return curvature;
+      curvature = +_;
+      return link;
+    };
+
+    return link;
+  };
+
+  // Populate the sourceLinks and targetLinks for each node.
+  // Also, if the source and target are not objects, assume they are indices.
+  function computeNodeLinks() {
+    nodes.forEach(function(node) {
+      node.sourceLinks = [];
+      node.targetLinks = [];
+    });
+
+    links.forEach(function(link) {
+      var source = link.source,
+          target = link.target;
+      if (typeof source === "number") source = link.source = nodes[link.source];
+      if (typeof target === "number") target = link.target = nodes[link.target];
+      source.sourceLinks.push(link);
+      target.targetLinks.push(link);
+    });
+  }
+
+  // Compute the value (size) of each node by summing the associated links.
+  function computeNodeValues() {
+    nodes.forEach(function(node) {
+      if (!(node.value)) //if not already given
+	  node.value = Math.max(
+        d3.sum(node.sourceLinks, value),
+        d3.sum(node.targetLinks, value)
+      );
+    });
+  }
+
+  // Take the list of nodes and create a DAG of supervertices, each consisting 
+  // of a strongly connected component of the graph
+  //
+  // Based off:
+  // http://en.wikipedia.org/wiki/Tarjan's_strongly_connected_components_algorithm
+  function computeNodeStructure() {
+    var nodeStack = [], 
+        index = 0;
+
+    nodes.forEach(function(node) {
+      if (!node.index) {
+        connect(node);
+      }
+    });
+
+    function connect(node) {
+      node.index = index++;
+      node.lowIndex = node.index;
+      node.onStack = true;
+      nodeStack.push(node);
+
+      if (node.sourceLinks) {
+        node.sourceLinks.forEach(function(sourceLink){
+          var target = sourceLink.target;
+          if (!target.hasOwnProperty('index')) {
+            connect(target);
+            node.lowIndex = Math.min(node.lowIndex, target.lowIndex);
+          } else if (target.onStack) {
+            node.lowIndex = Math.min(node.lowIndex, target.index);
+          }
+        });
+
+        if (node.lowIndex === node.index) {
+          var component = [], currentNode;
+          do { 
+            currentNode = nodeStack.pop()
+            currentNode.onStack = false;
+            component.push(currentNode);
+          } while (currentNode != node);
+          components.push({
+            root: node,
+            scc: component
+          });
+        }
+      }
+    }
+
+    components.forEach(function(component, i){
+      component.index = i;
+      component.scc.forEach(function(node) {
+        node.component = i;
+      });
+    });
+  }
+
+  // Assign the breadth (x-position) for each strongly connected component,
+  // followed by assigning breadth within the component.
+  function computeNodeBreadths() {
+    
+    layerComponents();
+
+    components.forEach(function(component, i){
+      bfs(component.root, function(node){
+        var result = node.sourceLinks
+          .filter(function(sourceLink){
+            return sourceLink.target.component == i;
+          })
+          .map(function(sourceLink){
+            return sourceLink.target;
+          });
+        return result;
+      });
+    });
+
+    var max = 0;
+    var componentsByBreadth = d3.nest()
+      .key(function(d) { return d.x; })
+      .sortKeys(d3.ascending)
+      .entries(components)
+      .map(function(d) { return d.values; });
+
+    var max = -1, nextMax = -1;
+    componentsByBreadth.forEach(function(c){
+      c.forEach(function(component){
+        component.x = max + 1;
+        component.scc.forEach(function(node){
+		  if (node.layer) node.x=node.layer;
+          else node.x = component.x + node.x;
+          nextMax = Math.max(nextMax, node.x);
+        });
+      });
+      max = nextMax;
+    });
+
+    
+    nodes
+      .filter(function(node) {
+        var outLinks = node.sourceLinks.filter(function(link){ return link.source.name != link.target.name; });
+        return (outLinks.length == 0);
+      })
+      .forEach(function(node) { node.x = max; })
+
+    scaleNodeBreadths((size[0] - nodeWidth) / Math.max(max, 1));
+
+    function flatten(a) {
+      return [].concat.apply([], a);
+    }
+
+    function layerComponents() {
+      var remainingComponents = components,
+          nextComponents,
+          visitedIndex,
+          x = 0;
+
+      while (remainingComponents.length) {
+        nextComponents = [];
+        visitedIndex = {};
+
+        remainingComponents.forEach(function(component) {
+          component.x = x;
+
+          component.scc.forEach(function(n) {
+            n.sourceLinks.forEach(function(l) {
+              if (!visitedIndex.hasOwnProperty(l.target.component) &&
+                   l.target.component != component.index) {
+                nextComponents.push(components[l.target.component]);
+                visitedIndex[l.target.component] = true;
+              }
+            })
+          });
+        });
+
+        remainingComponents = nextComponents;
+        ++x;
+      }
+    }
+
+    function bfs(node, extractTargets) {
+      var queue = [node], currentCount = 1, nextCount = 0;
+      var x = 0;
+
+      while(currentCount > 0) {
+        var currentNode = queue.shift();
+        currentCount--;
+
+        if (!currentNode.hasOwnProperty('x')) {
+          currentNode.x = x;
+          currentNode.dx = nodeWidth;
+
+          var targets = extractTargets(currentNode);
+
+          queue = queue.concat(targets);
+          nextCount += targets.length;
+        }
+
+
+        if (currentCount == 0) { // level change
+          x++;
+          currentCount = nextCount;
+          nextCount = 0;
+        }
+
+      }
+    }
+  }
+
+  function moveSourcesRight() {
+    nodes.forEach(function(node) {
+      if (!node.targetLinks.length) {
+        node.x = d3.min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
+      }
+    });
+  }
+
+  function moveSinksRight(x) {
+    nodes.forEach(function(node) {
+      if (!node.sourceLinks.length) {
+        node.x = x - 1;
+      }
+    });
+  }
+
+  function scaleNodeBreadths(kx) {
+    nodes.forEach(function(node) {
+      node.x *= kx;
+    });
+  }
+
+  function computeNodeDepths(iterations) {
+    var nodesByBreadth = d3.nest()
+        .key(function(d) { return d.x; })
+        .sortKeys(d3.ascending)
+        .entries(nodes)
+        .map(function(d) { return d.values; });
+    
+    initializeNodeDepth();
+    resolveCollisions();
+
+    for (var alpha = 1; iterations > 0; --iterations) {
+      relaxRightToLeft(alpha *= .99);
+      resolveCollisions();
+      relaxLeftToRight(alpha);
+      resolveCollisions();
+    }
+
+    function initializeNodeDepth() {
+      var ky = d3.min(nodesByBreadth, function(nodes) {
+        return (size[1] - (nodes.length - 1) * nodePadding) / d3.sum(nodes, value);
+      });
+
+      nodesByBreadth.forEach(function(nodes) {
+        nodes.forEach(function(node, i) {
+          node.y = i;
+          node.dy = node.value * ky;
+        });
+      });
+		
+      links.forEach(function(link) {
+        link.dy = link.value * ky;
+      });
+    }
+
+    function relaxLeftToRight(alpha) {
+      nodesByBreadth.forEach(function(nodes, breadth) {
+        nodes.forEach(function(node) {
+          if (node.targetLinks.length) {
+            var y = d3.sum(node.targetLinks, weightedSource) / d3.sum(node.targetLinks, value);
+            node.y += (y - center(node)) * alpha;
+          }
+        });
+      });
+
+      function weightedSource(link) {
+        return center(link.source) * link.value;
+      }
+    }
+
+    function relaxRightToLeft(alpha) {
+      nodesByBreadth.slice().reverse().forEach(function(nodes) {
+        nodes.forEach(function(node) {
+          if (node.sourceLinks.length) {
+            var y = d3.sum(node.sourceLinks, weightedTarget) / d3.sum(node.sourceLinks, value);
+            node.y += (y - center(node)) * alpha;
+          }
+        });
+      });
+
+      function weightedTarget(link) {
+        return center(link.target) * link.value;
+      }
+    }
+
+    function resolveCollisions() {
+      nodesByBreadth.forEach(function(nodes) {
+        var node,
+            dy,
+            y0 = 0,
+            n = nodes.length,
+            i;
+
+        // Push any overlapping nodes down.
+        nodes.sort(ascendingDepth);
+        for (i = 0; i < n; ++i) {
+          node = nodes[i];
+          dy = y0 - node.y;
+          if (dy > 0) node.y += dy;
+          y0 = node.y + node.dy + nodePadding;
+        }
+
+        // If the bottommost node goes outside the bounds, push it back up.
+        dy = y0 - nodePadding - size[1];
+        if (dy > 0) {
+          y0 = node.y -= dy;
+
+          // Push any overlapping nodes back up.
+          for (i = n - 2; i >= 0; --i) {
+            node = nodes[i];
+            dy = node.y + node.dy + nodePadding - y0;
+            if (dy > 0) node.y -= dy;
+            y0 = node.y;
+          }
+        }
+      });
+    }
+
+    function ascendingDepth(a, b) {
+      return a.y - b.y;
+    }
+  }
+
+  function computeLinkDepths() {
+    nodes.forEach(function(node) {
+      node.sourceLinks.sort(ascendingTargetDepth);
+      node.targetLinks.sort(ascendingSourceDepth);
+    });
+    nodes.forEach(function(node) {
+      var sy = 0, ty = 0;
+      node.sourceLinks.forEach(function(link) {
+        link.sy = sy;
+        sy += link.dy;
+      });
+      node.targetLinks.forEach(function(link) {
+        link.ty = ty;
+        ty += link.dy;
+      });
+    });
+
+    function ascendingSourceDepth(a, b) {
+      return a.source.y - b.source.y;
+    }
+
+    function ascendingTargetDepth(a, b) {
+      return a.target.y - b.target.y;
+    }
+  }
+
+  function center(node) {
+    return node.y + node.dy / 2;
+  }
+
+  function value(link) {
+    return link.value;
+  }
+
+  return sankey;
+};
