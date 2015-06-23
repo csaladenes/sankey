@@ -36,11 +36,10 @@ function draw() {
 	data={"nodes": [], "links": []}
 	
 	for (i = 0; i < nodesform[0][0].children.length; i++) {
-		data.nodes.push({"name": nodesform[0][0].children[i].children[0].value});
+		data.nodes.push(JSON.parse(nodesform[0][0].children[i].children[0].value));
 	}
 	for (i = 0; i < linksform[0][0].children.length; i++) {
-		var array = linksform[0][0].children[i].children[0].value.split(',');
-		data.links.push({"source":parseInt(array[0]),"target":parseInt(array[1]),"value":parseFloat(array[2])});
+		data.links.push(JSON.parse(linksform[0][0].children[i].children[0].value));
 	}
 	change(data);
 }
@@ -48,12 +47,11 @@ function save(){
 	d3.select('#save').style('z-index',100).transition().style('opacity',0.9);
 	st='{"nodes":['
 	for (i = 0; i < nodesform[0][0].children.length; i++) {
-		st=st+'{"name":"'+nodesform[0][0].children[i].children[0].value+'"},';
+		st=st+nodesform[0][0].children[i].children[0].value+',';
 	}
 	st=st.substring(0, st.length - 1)+'],"links":[';
 	for (i = 0; i < linksform[0][0].children.length; i++) {
-		var array = linksform[0][0].children[i].children[0].value.split(',');
-		st=st+'{"source":'+parseInt(array[0])+',"target":'+parseInt(array[1])+',"value":'+parseFloat(array[2])+'},';
+		st=st+linksform[0][0].children[i].children[0].value+',';
 	}
 	st = st.substring(0, st.length - 1)+']}';
 	d3.select('#savetext').text(st);
@@ -79,13 +77,14 @@ function loadsubmit(){
 			linksform[0][0].children[0].remove("div");
 		}
 		//add new node entry boxes
-		for (i = 0; i < newdata.nodes.length; i++) {
-			nodesform.append("div").append("input").attr("value",newdata.nodes[i].name);
+		var newdata2=JSON.parse(loadtext.substring(loadtext.indexOf('"nodes":[')+8, loadtext.indexOf('"links":[')-1));
+		for (i = 0; i < newdata2.length; i++) {
+			nodesform.append("div").append("input").attr("value",JSON.stringify(newdata2[i]));
 		}
 		//add new link entry boxes
-		var newdata=JSON.parse(loadtext.substring(loadtext.indexOf('"links":[')+8, loadtext.length - 1))
-		for (i = 0; i < newdata.length; i++) {
-			linksform.append("div").append("input").attr("value",newdata[i].source+","+newdata[i].target+","+newdata[i].value);
+		var newdata2=JSON.parse(loadtext.substring(loadtext.indexOf('"links":[')+8, loadtext.length - 1))
+		for (i = 0; i < newdata2.length; i++) {
+			linksform.append("div").append("input").attr("value",JSON.stringify(newdata2[i]));
 		}
 	}
 }
