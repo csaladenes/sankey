@@ -137,7 +137,8 @@ change = function(d) {
 	var e = g.append("path") //path2
 		.attr("d", path(2));
 	g.attr("fill", function(i) {
-			return i.source.color = color(i.source.name.replace(/ .*/, ""))
+			if (i.source.fill) return i.source.fill;
+								else return i.source.color = color(i.source.name.replace(/ .*/, ""))
 		}).attr("opacity", lowopacity).on("mouseover", function(d) {
 			d3.select(this).style('opacity', highopacity);
 		}).on("mouseout", function(d) {
@@ -158,7 +159,8 @@ change = function(d) {
 		.attr("height", function(i) {
 			return i.dy
 		}).attr("width", sankey.nodeWidth()).style("fill", function(i) {
-			return i.color = color(i.name.replace(/ .*/, ""))
+			if (i.fill) return i.color = i.fill;
+								else return i.color = color(i.name.replace(/ .*/, ""))
 		}).style("stroke", function(i) {
 			return d3.rgb(i.color).darker(2)
 		}).on("mouseover", function(d) {
