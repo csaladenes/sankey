@@ -19,14 +19,14 @@ var data={"nodes": [], "links": []}
 
 nodesform=d3.select("#nodes-form");
 function addnode() {
-	nodesform.append("div").append("input").attr("value","New Node");
+	nodesform.append("div").append("input").attr("value",'{"name":"New Node"}');
 }
 function removenode() {
 	nodesform[0][0].children[nodesform[0][0].children.length-1].remove("div")
 }
 linksform=d3.select("#links-form");
 function addlink() {
-	linksform.append("div").append("input").attr("value","0,1,0.52");
+	linksform.append("div").append("input").attr("value",'{"source":0,"target":1,"value":0.52}');
 }
 function removelink() {
 	linksform[0][0].children[linksform[0][0].children.length-1].remove("div")
