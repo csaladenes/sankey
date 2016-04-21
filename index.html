@@ -152,9 +152,14 @@
 			width:100%; 
 			min-width:220px;
 		}
+		#pngdownloadwrapper:hover{
+			cursor:pointer;
+			text-decoration:underline;
+		}
     </style>
     <script src="js/dragdealer.js"></script>
     <script src="js/d3.v3.min.js"></script>
+	<script src="js/svgexport.js"></script>
     <script>
         var sizecorrection = Math.max(0, 220 - parseInt(window.innerWidth * 0.2));
         function checksize() {
@@ -184,6 +189,8 @@
 	<script type="text/javascript">stLight.options({publisher: "505a26ad-d820-47bd-a500-7f49d04a30f5", doNotHash: true, doNotCopy: false, hashAddressBar: false});</script>
 	</head>
 <body onload="checksize();">
+	
+	<a id="pngdownload" href="" download="Sankey.png" style="visibility:hidden;display:none;position:fixed;top:0px;left:0px;width:0px;height:0px;"></a>
 
     <!--TITLELBAR-->
 
@@ -229,6 +236,8 @@
 						<label for="fixedlayout">save layout</label>
 					</span>
 				</div>
+				<br/>
+				<div id="pngdownloadwrapper">Save image ⇓</div>
 			</div>
 			
 			<!--INCREMENTAL-->

@@ -149,7 +149,13 @@ var margin = {
     },
     width = document.getElementById("chart").offsetWidth - margin.left - margin.right,
     height = document.getElementById("chart").offsetHeight - margin.bottom - 90;
-var svg = d3.select("#chart").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var svg = d3.select("#chart").append("svg")
+svg.append("rect").attr("x",0).attr("y",0).attr("width","100%").attr("height","100%").attr("fill","white")
+svg=svg.attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//set svg background color via rectangle trick
+d3.select("#chart").select("svg")
+
 var sankey = d3.sankey().nodeWidth(30).nodePadding(padding).size([width, height]);
 var path = sankey.reversibleLink();
 var change = function() {};
@@ -222,7 +228,7 @@ change = function(d) {
 	c.append("text") //node
 		.attr("x", -6).attr("y", function(i) {
 			return i.dy / 2
-		}).attr("dy", ".35em").attr("text-anchor", "end")
+		}).attr("dy", ".35em").attr("text-anchor", "end").attr("font-size","16px")
 		.text(function(i) {
 		if (labeltextformat<1){
 				return i.name
@@ -235,7 +241,7 @@ change = function(d) {
 	c.append("text") //node
 		.attr("x", function(i) {return -i.dy / 2})
 		.attr("y", function(i) {return i.dx / 2 + 6})
-		.attr("transform", "rotate(270)").attr("text-anchor", "middle").text(function(i) {
+		.attr("transform", "rotate(270)").attr("text-anchor", "middle").attr("font-size","16px").text(function(i) {
 			if ((i.dy>50)&&(labelformat<1)){
 				return format(i.value);
 			}
@@ -261,3 +267,17 @@ change = function(d) {
 	};
 };
 draw();
+
+//<!-- SAVE FUNCTION-->
+
+d3.select("#pngdownloadwrapper")
+.on("click",function(){
+	seturl();
+	setTimeout(function(){d3.select("#pngdownload").node().click();},500);
+})
+
+function seturl(){
+exportInlineSVG(d3.select("#chart").select("svg").node(), function(data) {
+	d3.select("#pngdownload").node().href=data;
+});
+}
