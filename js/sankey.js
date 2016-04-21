@@ -548,7 +548,8 @@ d3.sankey = function() {
 
   function computeLinkDepths() {
     nodes.forEach(function(node) {
-      node.sourceLinks.sort(ascendingTargetDepth);
+      if (parallelrendering) {}
+	  else node.sourceLinks.sort(ascendingTargetDepth);
       node.targetLinks.sort(ascendingSourceDepth);
     });
     nodes.forEach(function(node) {

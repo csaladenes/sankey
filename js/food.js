@@ -122,6 +122,7 @@ function loadsubmit(){
 
 //<!--SANKEY DIAGRAM-->
 
+var parallelrendering=false;
 var padding = 28;
 var labelformat = 0;
 var labeltextformat = 0;
