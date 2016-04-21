@@ -208,7 +208,13 @@
 			<div id="load" style="position:fixed;float:left;width:inherit;height:100%;background:#fff;color:#000;opacity:0;margin-top:0px;margin-left:0px;z-index:-1;">
 				<div>Please paste the Sankey string below:</div>
 				<textarea id="loadtext" style="margin-top:20px;margin-bottom:20px;width:97%;height:50%;"/></textarea> 
-				<div><button onclick="loadsubmit();">Done</button></div>
+				<div>
+					<button onclick="loadsubmit();">Done</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<span style="font-size:12px;">
+						<input title="Ignore fixed node positions on canvas, if provided" type="checkbox" id="ignorelayout">
+						<label for="ignorelayout">ignore layout</label>
+					</span>
+				</div>
 			</div>
 			
 			<!--SAVE-->
@@ -216,7 +222,13 @@
 			<div id="save" style="position:fixed;float:left;width:inherit;height:100%;background:#fff;color:#000;opacity:0;margin-top:0px;margin-left:0px;z-index:-1;">
 				<div>Please copy and save the text below to load later:</div>
 				<textarea id="savetext" style="margin-top:20px;margin-bottom:20px;width:97%;height:50%;"/></textarea> 
-				<div><button onclick="d3.select('#save').transition().style('opacity',0).style('z-index',-1)">Done</button></div>
+				<div>
+					<button onclick="d3.select('#save').transition().style('opacity',0).style('z-index',-1)">Done</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<span style="font-size:12px;">
+						<input title="Save node positions on canvas" type="checkbox" id="fixedlayout" onclick="save();">
+						<label for="fixedlayout">save layout</label>
+					</span>
+				</div>
 			</div>
 			
 			<!--INCREMENTAL-->
@@ -228,7 +240,18 @@
                         <label for="xmove">↔</label>
                         <img alt="" style="width:5px;height:0px;">
                         <input title="Enable vertical node dragging" type="checkbox" id="ymove" checked>
-                        <label for="ymove">↕</label>
+                        <label for="ymove">↕&nbsp;</label>
+                    </div>
+                </div>
+            </div>
+			<div style="display:block;overflow: hidden;white-space: nowrap;"><span style="float:left;">Label nodes:</span>
+                <div style="float:right; padding-right:0; margin-right:0;" onclick="draw();">
+                    <div style="font-size:10px;">
+                        <input title="Enable horizontal node dragging" type="checkbox" id="vlabel" checked>
+                        <label for="vlabel">value&nbsp;&nbsp;</label>
+                        <img alt="" style="width:5px;height:0px;">
+                        <input title="Enable vertical node dragging" type="checkbox" id="tlabel" checked>
+                        <label for="tlabel">text</label>
                     </div>
                 </div>
             </div>
@@ -256,7 +279,7 @@
                     <div id="oslider" title="Drag slider to set diagram flow opacities" class="dragdealer" style="margin-top:2px;margin-left:-130px;width:130px; height:18px; position:absolute;">
                         <div class="handle orange-bar">↔
                             <script>
-                                new Dragdealer("oslider", {
+                                var opacityslider = new Dragdealer("oslider", {
                                     x: 0.25,
                                     steps: 5,
                                     snap: true,

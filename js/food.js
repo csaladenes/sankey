@@ -45,7 +45,7 @@ function draw() {
 }
 function save(){
 	d3.select('#save').style('z-index',100).transition().style('opacity',0.9);
-	st='{"nodes":['
+	st='{"sankey":{"nodes":['
 	for (i = 0; i < nodesform[0][0].children.length; i++) {
 		st=st+nodesform[0][0].children[i].children[0].value+',';
 	}
@@ -53,7 +53,15 @@ function save(){
 	for (i = 0; i < linksform[0][0].children.length; i++) {
 		st=st+linksform[0][0].children[i].children[0].value+',';
 	}
-	st = st.substring(0, st.length - 1)+']}';
+	st = st.substring(0, st.length - 1)+']},"params":['+densityslider.value.current[0]+','+opacityslider.value.current[0]+','+labelformat+','+labeltextformat+']';
+	if (document.getElementById("fixedlayout").checked){
+		var coords=[]
+		sankey.nodes().forEach(function(d){
+			coords.push([d.x,d.y])
+		})
+		st=st+',"fixedlayout":'+JSON.stringify(coords);
+	} 
+	st=st+'}';
 	d3.select('#savetext').text(st);
 }
 function load(){
@@ -61,11 +69,17 @@ function load(){
 }
 function loadsubmit(){
 	d3.select('#load').transition().style('opacity',0).style('z-index',-1);
-	var loadtext=d3.select('#load')[0][0].children[1].value;
-	if (loadtext!="") {
-		//redraw
-		var newdata=JSON.parse(loadtext);
-		change(newdata);
+	var rawtext=d3.select('#load')[0][0].children[1].value;
+	if (rawtext!="") {
+		//parse data
+		var rawdata=JSON.parse(rawtext);
+		if ("sankey" in rawdata) {
+			var newdata=rawdata.sankey;
+		}
+		else {
+			var newdata=rawdata;
+		}
+		var loadtext=JSON.stringify(newdata)
 		//remove existing node entry boxes
 		var n=nodesform[0][0].children.length;
 		for (i = 0; i < n; i++) {
@@ -86,15 +100,35 @@ function loadsubmit(){
 		for (i = 0; i < newdata2.length; i++) {
 			linksform.append("div").append("input").attr("value",JSON.stringify(newdata2[i]));
 		}
+		//set parameters
+		if ("fixedlayout" in rawdata) {
+			fixedlayout=document.getElementById("ignorelayout").checked?[]:rawdata.fixedlayout;
+		} else {
+			fixedlayout=[];		
+		}
+		if ("params" in rawdata) {
+			labelformat=rawdata.params[2];
+			labeltextformat=rawdata.params[3];
+			document.getElementById("vlabel").checked=(labelformat==0)?true:false;
+			document.getElementById("tlabel").checked=(labeltextformat==0)?true:false;
+			densityslider.setValue(rawdata.params[0]);
+			opacityslider.setValue(rawdata.params[1]);
+		}
+		else { 
+			change(newdata);
+		}
 	}
 }
 
 //<!--SANKEY DIAGRAM-->
 
 var padding = 28;
-var paddingmultiplier = 50;
+var labelformat = 0;
+var labeltextformat = 0;
+var paddingmultiplier = 100;
 var lowopacity = 0.3;
 var highopacity = 0.7;
+var fixedlayout=[];
 var format2Number = d3.format(",.2f"),
     formatNumber = d3.format(",.0f"),
     format = function(a) {
@@ -120,7 +154,10 @@ var path = sankey.reversibleLink();
 var change = function() {};
 
 change = function(d) {
-					
+
+	labelformat = document.getElementById("vlabel").checked?0:1;
+	labeltextformat = document.getElementById("tlabel").checked?0:1;
+		
 	padding = paddingmultiplier * (1 - densityslider.getValue()[0]) + 3
 	svg.selectAll("g").remove();
 	sankey = d3.sankey().nodeWidth(30).nodePadding(padding).size([width, height]);
@@ -184,8 +221,13 @@ change = function(d) {
 	c.append("text") //node
 		.attr("x", -6).attr("y", function(i) {
 			return i.dy / 2
-		}).attr("dy", ".35em").attr("text-anchor", "end").attr("transform", null).text(function(i) {
-			return i.name
+		}).attr("dy", ".35em").attr("text-anchor", "end")
+		.text(function(i) {
+		if (labeltextformat<1){
+				return i.name
+			} else {
+				return "";
+			}
 		}).filter(function(i) {
 			return i.x < width / 2
 		}).attr("x", 6 + sankey.nodeWidth()).attr("text-anchor", "start")
@@ -193,7 +235,7 @@ change = function(d) {
 		.attr("x", function(i) {return -i.dy / 2})
 		.attr("y", function(i) {return i.dx / 2 + 6})
 		.attr("transform", "rotate(270)").attr("text-anchor", "middle").text(function(i) {
-			if (i.dy>50){
+			if ((i.dy>50)&&(labelformat<1)){
 				return format(i.value);
 			}
 		}).attr("fill","white").attr("stroke","black");

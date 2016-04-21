@@ -49,7 +49,7 @@ d3.sankey = function() {
     
     return sankey;
   };
-
+  
   sankey.relayout = function() {
     computeLinkDepths();
     return sankey;
@@ -405,6 +405,14 @@ d3.sankey = function() {
 
       }
     }
+	
+	//extra code for fixed layout - x part
+	if (fixedlayout.length>0) {
+	  sankey.nodes().forEach(function(d,i){
+		d.x=fixedlayout[i][0];
+	  })
+	}
+	
   }
 
   function moveSourcesRight() {
@@ -529,6 +537,13 @@ d3.sankey = function() {
     function ascendingDepth(a, b) {
       return a.y - b.y;
     }
+	
+	//extra code for fixed layout - y part
+	if (fixedlayout.length>0) {
+	  sankey.nodes().forEach(function(d,i){
+		d.y=fixedlayout[i][1];
+	  })
+	}
   }
 
   function computeLinkDepths() {
