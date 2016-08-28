@@ -151,6 +151,13 @@
 		.likeform input {
 			width:100%; 
 			min-width:220px;
+			margin-top:5px;
+		}
+		.likeform2 input {
+			width: -moz-calc(100% - 13px);
+            width: -webkit-calc(100% - 13px);
+            width: calc(100% - 13px);
+			min-width:207px;
 		}
 		#pngdownloadwrapper:hover{
 			cursor:pointer;
@@ -302,6 +309,12 @@
                     </div>
                 </div>
             </div>
+			<div style="display:block;overflow: hidden;white-space: nowrap;"><span style="float:left;">Decimals:</span>
+                <div style="float:right;">
+                    <span>Nodes: <input type="text" value='0' id="ndec" style="width:12px"/></span>
+					<span>Links: <input type="text" value='2' id='ldec' style="width:12px"/></span>
+                </div>
+            </div>
 			<div style="display:block;overflow: hidden;white-space: nowrap;">
 				<div>
 					<button onclick="draw()" style="width:100%; min-width:220px; margin-top:20px;margin-bottom:20px;font-size:20px;">Draw Sankey</button>
@@ -314,21 +327,21 @@
 				<span><button onclick="addnode()" style="width:45%; min-width:100px; float:left;">Add new node</button></span>
 				<span><button onclick="removenode()" style="width:45%; min-width:100px; float:right;">Remove node</button></span>
 				</div>
-				<div class="likeform" id="nodes-form">
-					<div><input type="text" value='{"name":"Oil"}'/></div>
-					<div><input type="text" value='{"name":"Natural Gas"}' /></div>
-					<div><input type="text" value='{"name":"Coal","fill":"seaGreen"}'/></div>
-					<div><input type="text" value='{"name":"Fossil Fuels","value":65,"layer":2}'/></div>
-					<div><input type="text" value='{"name":"Electricity","layer":2}'/></div>
-					<div><input type="text" value='{"name":"Energy","fill":"grey"}'/></div>
+				<div class="likeform2" id="nodes-form">
+					<div>0&nbsp;<input type="text" value='{"name":"Oil"}'/></div>
+					<div>1&nbsp;<input type="text" value='{"name":"Natural Gas"}' /></div>
+					<div>2&nbsp;<input type="text" value='{"name":"Coal","fill":"seaGreen"}'/></div>
+					<div>3&nbsp;<input type="text" value='{"name":"Fossil Fuels","value":65,"layer":2}'/></div>
+					<div>4&nbsp;<input type="text" value='{"name":"Electricity","layer":2}'/></div>
+					<div>5&nbsp;<input type="text" value='{"name":"Energy","fill":"grey"}'/></div>
 				</div>
 			</div>
-			<div style="display:block;overflow: hidden;white-space: nowrap;">
+			<div style="display:block;overflow: hidden;white-space: nowrap; margin-top:10px;">
 				<div style="display:block;overflow: hidden;white-space: nowrap;">
 				<span><button onclick="addlink()" style="width:45%; min-width:100px; float:left;">Add new link</button></span>
 				<span><button onclick="removelink()" style="width:45%; min-width:100px; float:right;">Remove link</button></span>
 				</div>
-				<div class="likeform" id="links-form">
+				<div class="likeform" id="links-form" >
 					<div><input type="text" value='{"source":0,"target":3,"value":15}'/></div>
 					<div><input type="text" value='{"source":1,"target":3,"value":20}'/></div>
 					<div><input type="text" value='{"source":2,"target":3,"value":25}'/></div>
@@ -345,7 +358,7 @@
        
         <!--SANKEY DIAGRAM-->
 
-        <div id="chart" style="z-index:5;"></div>
+        <div id="chart" style="z-index:5; position:fixed;"></div>
 
         <!---------SCRIPTS----------->
 

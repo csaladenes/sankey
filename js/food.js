@@ -19,7 +19,9 @@ var data={"nodes": [], "links": []}
 
 nodesform=d3.select("#nodes-form");
 function addnode() {
-	nodesform.append("div").append("input").attr("value",'{"name":"New Node"}');
+	var a=nodesform.append("div");
+	a.text(nodesform[0][0].children.length-1+' ');
+	a.append("input").attr("value",'{"name":"New Node"}');
 }
 function removenode() {
 	nodesform[0][0].children[nodesform[0][0].children.length-1].remove("div")
@@ -93,7 +95,9 @@ function loadsubmit(){
 		//add new node entry boxes
 		var newdata2=JSON.parse(loadtext.substring(loadtext.indexOf('"nodes":[')+8, loadtext.indexOf('"links":[')-1));
 		for (i = 0; i < newdata2.length; i++) {
-			nodesform.append("div").append("input").attr("value",JSON.stringify(newdata2[i]));
+			var a=nodesform.append("div");
+			a.text(nodesform[0][0].children.length-1+' ');
+			a.append("input").attr("value",JSON.stringify(newdata2[i]));
 		}
 		//add new link entry boxes
 		var newdata2=JSON.parse(loadtext.substring(loadtext.indexOf('"links":[')+8, loadtext.length - 1))
@@ -131,14 +135,30 @@ var lowopacity = 0.3;
 var highopacity = 0.7;
 var fixedlayout=[];
 var format2Number = d3.format(",.2f"),
-    formatNumber = d3.format(",.0f"),
+    format1Number = d3.format(",.1f"),
+	format3Number = d3.format(",.3f"),
+	formatNumber = d3.format(",.0f"),
     format = function(a) {
         return formatNumber(a)
-    },
-    format2 = function(a) {
-        return format2Number(a)
-    },
-    color = d3.scale.category20();
+    },color = d3.scale.category20();
+	linkformat= function(a) {
+		if (d3.select("#ldec").node().value==0) return formatNumber(a);
+		if (d3.select("#ldec").node().value==1) return format1Number(a);
+		if (d3.select("#ldec").node().value==2) return format2Number(a);
+		return format3Number(a);
+	},
+	nodeformat= function(a) {
+		if (d3.select("#ndec").node().value==0) return formatNumber(a);
+		if (d3.select("#ndec").node().value==1) return format1Number(a);
+		if (d3.select("#ndec").node().value==2) return format2Number(a);
+		return format3Number(a);
+	};
+	
+d3.select("#ndec")
+.on("change",draw);
+d3.select("#ldec")
+.on("change",draw);
+
 d3.select("#chart").style("width", document.getElementById("chart").offsetWidth - sizecorrection)
 d3.select("#titlebar").style("width", document.getElementById("titlebar").offsetWidth - sizecorrection)
 var margin = {
@@ -188,7 +208,7 @@ change = function(d) {
 			d3.select(this).style('opacity', lowopacity);
 		}).append("title") //link
 		.text(function(i) {
-			return i.source.name + " → " + i.target.name + "\n" + format2(i.value)
+			return i.source.name + " → " + i.target.name + "\n" + linkformat(i.value)
 		});
 	var c = svg.append("g") //node
 		.selectAll(".node").data(d.nodes).enter().append("g").attr("class", "node").attr("transform", function(i) {
@@ -222,7 +242,7 @@ change = function(d) {
 				else return "none"
 			});
 		}).append("title").text(function(i) {
-			return i.name + "\n" + format2(i.value)
+			return i.name + "\n" + nodeformat(i.value)
 			
 		});
 	c.append("text") //node
@@ -243,7 +263,7 @@ change = function(d) {
 		.attr("y", function(i) {return i.dx / 2 + 6})
 		.attr("transform", "rotate(270)").attr("text-anchor", "middle").attr("font-size","16px").text(function(i) {
 			if ((i.dy>50)&&(labelformat<1)){
-				return format(i.value);
+				return nodeformat(i.value);
 			}
 		}).attr("fill","white").attr("stroke","black");
 		
