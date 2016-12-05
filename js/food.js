@@ -115,7 +115,7 @@ function loadsubmit(){
 			labeltextformat=rawdata.params[3];
 			document.getElementById("vlabel").checked=(labelformat==0)?true:false;
 			document.getElementById("tlabel").checked=(labeltextformat==0)?true:false;
-			document.getElementById("clabel").checked=(showlinkcount==0)?true:false;
+			document.getElementById("clabel").checked=(showlinkcount==1)?true:false;
 			densityslider.setValue(rawdata.params[0]);
 			opacityslider.setValue(rawdata.params[1]);
 		}
@@ -186,7 +186,7 @@ change = function(d) {
 
 	labelformat = document.getElementById("vlabel").checked?0:1;
 	labeltextformat = document.getElementById("tlabel").checked?0:1;
-	showlinkcount = document.getElementById("clabel").checked?0:1;
+	showlinkcount = document.getElementById("clabel").checked?1:0;
 		
 	padding = paddingmultiplier * (1 - densityslider.getValue()[0]) + 3
 	svg.selectAll("g").remove();
