@@ -127,6 +127,8 @@ function loadsubmit(){
 //<!--SANKEY DIAGRAM-->
 
 var parallelrendering=false;
+var sourcelinks=false;
+var targetlinks=false;
 var padding = 28;
 var labelformat = 0;
 var labeltextformat = 0;
@@ -263,11 +265,14 @@ change = function(d) {
 		.attr("y", function(i) {return i.dx / 2 + 6})
 		.attr("transform", "rotate(270)").attr("text-anchor", "middle").attr("font-size","16px").text(function(i) {
 			if ((i.dy>50)&&(labelformat<1)){
-				return nodeformat(i.value);
+				var nodelabel=nodeformat(i.value);
+				if (targetlinks||sourcelinks) nodelabel=nodelabel+"  "
+				if (targetlinks) nodelabel=nodelabel+" → "+(i.targetLinks.length);
+				if (sourcelinks) nodelabel=nodelabel+"  "+(i.sourceLinks.length)+" → ";				
+				return nodelabel;
 			}
 		}).attr("fill","white").attr("stroke","black");
 		
-
 	function b(i) { //dragmove
 		if (document.getElementById("ymove").checked) {
 			if (document.getElementById("xmove").checked) {
