@@ -115,7 +115,6 @@ function loadsubmit(){
 			labeltextformat=rawdata.params[3];
 			document.getElementById("vlabel").checked=(labelformat==0)?true:false;
 			document.getElementById("tlabel").checked=(labeltextformat==0)?true:false;
-			document.getElementById("clabel").checked=(showlinkcount==0)?true:false;
 			densityslider.setValue(rawdata.params[0]);
 			opacityslider.setValue(rawdata.params[1]);
 		}
@@ -128,7 +127,8 @@ function loadsubmit(){
 //<!--SANKEY DIAGRAM-->
 
 var parallelrendering=false;
-var showlinkcount=true;
+var sourcelinks=false;
+var targetlinks=false;
 var padding = 28;
 var labelformat = 0;
 var labeltextformat = 0;
@@ -186,7 +186,6 @@ change = function(d) {
 
 	labelformat = document.getElementById("vlabel").checked?0:1;
 	labeltextformat = document.getElementById("tlabel").checked?0:1;
-	showlinkcount = document.getElementById("clabel").checked?0:1;
 		
 	padding = paddingmultiplier * (1 - densityslider.getValue()[0]) + 3
 	svg.selectAll("g").remove();
@@ -254,19 +253,10 @@ change = function(d) {
 		}).attr("dy", ".35em").attr("text-anchor", "end").attr("font-size","16px")
 		.text(function(i) {
 		if (labeltextformat<1){
-				return i.name;
+				return i.name
 			} else {
 				return "";
 			}
-		}).filter(function(i) {
-			return i.x < width / 2
-		}).attr("x", 6 + sankey.nodeWidth()).attr("text-anchor", "start")
-	if (showlinkcount) c.append("text") //node
-		.attr("x", -6).attr("y", function(i) {
-			return i.dy / 2 + 20
-		}).attr("dy", ".35em").attr("text-anchor", "end").attr("font-size","16px")
-		.text(function(i) {
-			return "→ "+(i.targetLinks.length)+" | "+(i.sourceLinks.length)+" →";
 		}).filter(function(i) {
 			return i.x < width / 2
 		}).attr("x", 6 + sankey.nodeWidth()).attr("text-anchor", "start")
@@ -275,7 +265,11 @@ change = function(d) {
 		.attr("y", function(i) {return i.dx / 2 + 6})
 		.attr("transform", "rotate(270)").attr("text-anchor", "middle").attr("font-size","16px").text(function(i) {
 			if ((i.dy>50)&&(labelformat<1)){
-				return nodeformat(i.value);
+				var nodelabel=nodeformat(i.value);
+				if (targetlinks||sourcelinks) nodelabel=nodelabel+"  "
+				if (targetlinks) nodelabel=nodelabel+" → "+(i.targetLinks.length);
+				if (sourcelinks) nodelabel=nodelabel+"  "+(i.sourceLinks.length)+" → ";				
+				return nodelabel;
 			}
 		}).attr("fill","white").attr("stroke","black");
 		
