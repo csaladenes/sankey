@@ -55,7 +55,7 @@ function save(){
 	for (i = 0; i < linksform[0][0].children.length; i++) {
 		st=st+linksform[0][0].children[i].children[0].value+',';
 	}
-	st = st.substring(0, st.length - 1)+']},"params":['+densityslider.value.current[0]+','+opacityslider.value.current[0]+','+labelformat+','+labeltextformat+']';
+	st = st.substring(0, st.length - 1)+']},"params":['+densityslider.value.current[0]+','+opacityslider.value.current[0]+','+labelformat+','+labeltextformat+','+showlinkcount+']';
 	if (document.getElementById("fixedlayout").checked){
 		var coords=[]
 		sankey.nodes().forEach(function(d){
@@ -113,6 +113,7 @@ function loadsubmit(){
 		if ("params" in rawdata) {
 			labelformat=rawdata.params[2];
 			labeltextformat=rawdata.params[3];
+			showlinkcount=rawdata.params[4];
 			document.getElementById("vlabel").checked=(labelformat==0)?true:false;
 			document.getElementById("tlabel").checked=(labeltextformat==0)?true:false;
 			document.getElementById("clabel").checked=(showlinkcount==1)?true:false;
@@ -128,10 +129,10 @@ function loadsubmit(){
 //<!--SANKEY DIAGRAM-->
 
 var parallelrendering=false;
-var showlinkcount=true;
 var padding = 28;
 var labelformat = 0;
 var labeltextformat = 0;
+var showlinkcount = 0;
 var paddingmultiplier = 100;
 var lowopacity = 0.3;
 var highopacity = 0.7;
@@ -261,7 +262,7 @@ change = function(d) {
 		}).filter(function(i) {
 			return i.x < width / 2
 		}).attr("x", 6 + sankey.nodeWidth()).attr("text-anchor", "start")
-	if (showlinkcount) c.append("text") //node
+	if (showlinkcount>0) c.append("text") //node
 		.attr("x", -6).attr("y", function(i) {
 			return i.dy / 2 + 20
 		}).attr("dy", ".35em").attr("text-anchor", "end").attr("font-size","16px")
