@@ -113,7 +113,8 @@ function loadsubmit(){
 		if ("params" in rawdata) {
 			labelformat=rawdata.params[2];
 			labeltextformat=rawdata.params[3];
-			showlinkcount=rawdata.params[4];
+			if (rawdata.params.length>4) showlinkcount=rawdata.params[4];
+			else showlinkcount=0;
 			document.getElementById("vlabel").checked=(labelformat==0)?true:false;
 			document.getElementById("tlabel").checked=(labeltextformat==0)?true:false;
 			document.getElementById("clabel").checked=(showlinkcount==1)?true:false;
