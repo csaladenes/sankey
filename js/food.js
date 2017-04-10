@@ -130,6 +130,7 @@ function loadsubmit(){
 //<!--SANKEY DIAGRAM-->
 
 var parallelrendering=false;
+var minnodewidth = 50;
 var padding = 28;
 var labelformat = 0;
 var labeltextformat = 0;
@@ -276,7 +277,7 @@ change = function(d) {
 		.attr("x", function(i) {return -i.dy / 2})
 		.attr("y", function(i) {return i.dx / 2 + 6})
 		.attr("transform", "rotate(270)").attr("text-anchor", "middle").attr("font-size","16px").text(function(i) {
-			if ((i.dy>50)&&(labelformat<1)){
+			if ((i.dy>minnodewidth)&&(labelformat<1)){
 				return nodeformat(i.value);
 			}
 		}).attr("fill","white").attr("stroke","black");
