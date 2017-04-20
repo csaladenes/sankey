@@ -1,7 +1,7 @@
-Sankey Diagram Generator
+[<img src="http://food.csaladen.es/favicon.png" alt="favicon" height=24 width=24 />  Sankey Diagram Generator](http://sankey.csaladen.es/)
 ======
 [![Sankey Diagram Generator](snapshot.jpg "Sankey Diagram Generator")](http://sankey.csaladen.es/)  
-
+  
 - Written in HTML5, CSS3 and D3.js
 - Can move nodes freely around the canvas
 - Can adjust link opacity and node spacing
