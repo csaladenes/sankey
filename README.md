@@ -1,5 +1,6 @@
 Sankey Diagram Generator
 ======
+[![Sankey Diagram Generator](snapshot.jpg "Sankey Diagram Generator")](http://sankey.csaladen.es/)  
 
 - Written in HTML5, CSS3 and D3.js
 - Can move nodes freely around the canvas
@@ -15,5 +16,5 @@ Try: http://sankey.csaladen.es
 https://csaladenes.wordpress.com/2014/11/06/sankey-diagram-generator/
    
 # Credit
-Denes Csala, 2014  
+Dénes Csala, 2014  
 http://csaladen.es
