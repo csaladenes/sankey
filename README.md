@@ -14,6 +14,6 @@ Try: http://sankey.csaladen.es
 # Documentation 
 https://csaladenes.wordpress.com/2014/11/06/sankey-diagram-generator/
    
-# Creadit
+# Credit
 Denes Csala, 2014  
 http://csaladen.es
