@@ -275,12 +275,16 @@ change = function(d) {
 		}).attr("x", 6 + sankey.nodeWidth()).attr("text-anchor", "start")
 	c.append("text") //node
 		.attr("x", function(i) {return -i.dy / 2})
-		.attr("y", function(i) {return i.dx / 2 + 6})
-		.attr("transform", "rotate(270)").attr("text-anchor", "middle").attr("font-size","16px").text(function(i) {
+		.attr("y", function(i) {return i.dx / 2 + 9})
+		.attr("transform", "rotate(270)").attr("text-anchor", "middle").attr("font-size","23px").text(function(i) {
 			if ((i.dy>minnodewidth)&&(labelformat<1)){
 				return nodeformat(i.value);
 			}
-		}).attr("fill","white").attr("stroke","black");
+		}).attr("fill",function(d){
+			return d3.rgb(d["color"]).brighter(2)
+		}).attr("stroke",function(d){
+			return d3.rgb(d["color"]).darker(2)
+		}).attr("stroke-width","1px");
 		
 	function b(i) { //dragmove
 		if (document.getElementById("ymove").checked) {

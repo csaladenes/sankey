@@ -15,10 +15,14 @@
     <title>Sankey Diagram</title>
     <link rel="shortcut icon" href="http://food.csaladen.es/favicon.png" />
     <style>
+        @font-face {
+            font-family: "MyFont";
+            src: url('Lato-Regular.ttf') format("truetype");
+        }
         html,
         body {
             height: 100%;
-            font-family: "Trebuchet MS", "Open Sans", Segoe UI light, Verdana, Tahoma, Helvetica, sans-serif;
+            font-family: "MyFont", "Open Sans", Segoe UI light, Verdana, Tahoma, Helvetica, sans-serif;
             margin: 0;
             padding: 0;
             background: #fff;
@@ -144,7 +148,7 @@
 			margin-right:5px;
 			color: #000;
             font-size: 10px;
-            font-family: "Trebuchet MS";  
+            font-family: "MyFont";  
             font-weight: lighter;
             text-decoration: none;			
 		}
@@ -204,6 +208,7 @@
     <div id="titlebar">
 		<span id="titletext" class="pagetitle">Sankey Diagram Generator</span>
         <span id="titletext" class="pagetitle" style="positions:relative;float:right;right:30px;top:0px;"><a href="https://csaladenes.wordpress.com/2014/11/06/sankey-diagram-generator/" target="_blank">Help</a>&nbsp;|
+        <span id="titletext" class="pagetitle"><a href="https://github.com/csaladenes/sankey" target="_blank">Code</a></span>&nbsp;|
 		<span id="titletext" class="pagetitle"><a href="#" onclick="alert('Sankey Diagram Generator by Dénes Csala, based on the Sankey plugin for D3 by Mike Bostock; http://sankey.csaladen.es; 2014');">Cite</a></span>
     </div>
 	

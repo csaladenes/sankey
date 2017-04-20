@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2014 csaladenes
+Copyright (c) 2014 Denes Csala, @csaladenes
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -12,14 +12,6 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-The software uses the following javascript frameworks,
-all of which are distributed under the MIT or GNU/GPL license:
-- D3.js http://d3js.org/  data-oriented javascript framework. 
-	- Sankey plugin http://bost.ocks.org/mike/sankey/ for D3.js (heavily modified) by Mike Bostock, 
-	  which is based on the initial version http://tamc.github.io/Sankey/ by Thomas Counsell. 
-	  I have incorporated the ability to render Sankey cycles, as pioneered by https://github.com/cfergus
-- Dragdealer.js href="http://skidding.github.io/dragdealer/ by Ovidiu Chereches
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,4 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
