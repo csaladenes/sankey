@@ -341,7 +341,7 @@ d3.sankey = function() {
         var outLinks = node.sourceLinks.filter(function(link){ return link.source.name != link.target.name; });
         return (outLinks.length == 0);
       })
-      .forEach(function(node) { node.x = max; })
+      .forEach(function(node) { node.x = (node.layer)?node.x:max; })
 
     scaleNodeBreadths((size[0] - nodeWidth) / Math.max(max, 1));
 
