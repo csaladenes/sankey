@@ -206,8 +206,9 @@ change = function(d) {
 	var e = g.append("path") //path2
 		.attr("d", path(2));
 	g.attr("fill", function(i) {
-			if (i.source.fill) return i.source.fill;
-								else return i.source.color = color(i.source.name.replace(/ .*/, ""))
+			if (i.fill) return i.fill;
+			else if (i.source.fill) return i.source.fill;
+			else return i.source.color = color(i.source.name.replace(/ .*/, ""))
 		}).attr("opacity", lowopacity).on("mouseover", function(d) {
 			d3.select(this).style('opacity', highopacity);
 		}).on("mouseout", function(d) {
