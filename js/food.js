@@ -34,7 +34,7 @@ function removelink() {
 	linksform[0][0].children[linksform[0][0].children.length-1].remove("div")
 }
 function draw() {
-	
+	saveLS()
 	data={"nodes": [], "links": []}
 	
 	for (i = 0; i < nodesform[0][0].children.length; i++) {
@@ -47,7 +47,19 @@ function draw() {
 }
 function save(){
 	d3.select('#save').style('z-index',100).transition().style('opacity',0.9);
-	st='{"sankey":{"nodes":['
+	st=generateJSON();
+	d3.select('#savetext').text(st);
+}
+function saveLS(){
+	if (typeof(Storage) !== "undefined") {
+    	// Code for localStorage
+		window.localStorage.setItem('rawtext',generateJSON());
+    	} else {
+    	// No web storage Support.
+	}
+}
+function generateJSON(){
+	var st='{"sankey":{"nodes":['
 	for (i = 0; i < nodesform[0][0].children.length; i++) {
 		st=st+nodesform[0][0].children[i].children[0].value+',';
 	}
@@ -64,7 +76,7 @@ function save(){
 		st=st+',"fixedlayout":'+JSON.stringify(coords);
 	} 
 	st=st+'}';
-	d3.select('#savetext').text(st);
+	return st;
 }
 function load(){
 	d3.select('#load').style('z-index',100).transition().style('opacity',0.9);
@@ -73,7 +85,23 @@ function loadsubmit(){
 	d3.select('#load').transition().style('opacity',0).style('z-index',-1);
 	var rawtext=d3.select('#load')[0][0].children[1].value;
 	if (rawtext!="") {
-		//parse data
+		loadraw(rawtext);
+	}
+}
+function loadLS(){
+	if (typeof(Storage) !== "undefined") {
+    	// Code for localStorage
+		if (window.localStorage.getItem("rawtext") === null) {
+		  //Nothing stored
+		} else {
+		loadraw(window.localStorage.getItem('rawtext'));
+		}
+    	} else {
+    	// No web storage Support.
+	}
+}
+function loadraw(rawtext){
+	//parse data
 		var rawdata=JSON.parse(rawtext);
 		if ("sankey" in rawdata) {
 			var newdata=rawdata.sankey;
@@ -124,7 +152,6 @@ function loadsubmit(){
 		else { 
 			change(newdata);
 		}
-	}
 }
 
 //<!--SANKEY DIAGRAM-->
