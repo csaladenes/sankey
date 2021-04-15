@@ -332,6 +332,8 @@ change = function(d) {
 		e.attr("d", path(2))
 	};
 };
+// check if there is any info stored in LocalStorage before first draw
+loadLS();
 draw();
 
 //<!-- SAVE FUNCTION-->
