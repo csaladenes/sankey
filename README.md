@@ -21,3 +21,7 @@ https://csaladenes.wordpress.com/2014/11/06/sankey-diagram-generator/
 # Credit
 Dénes Csala, 2014  
 http://csaladen.es
+
+## 💫 Stars over time
+[![Stargazers over time](https://starchart.cc/csaladenes/sankey.svg?variant=adaptive)](https://starchart.cc/csaladenes/sankey)
+
